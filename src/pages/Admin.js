@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Query, Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
@@ -13,67 +12,27 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { FiPlusCircle } from "react-icons/fi";
 import Notify from "../components/Notify/Notify";
-import { StyledPaper } from "../components/StyledComponents/StyledComponents";
+import {
+  StyledPaper,
+  ScrollContainer
+} from "../components/StyledComponents/StyledComponents";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
+import { DEPARTMENTS, ADD_DEPARTMENT, ADD_POSITION } from "../graphql";
 
-const DEPARTMENTS = gql`
-  query getDepartments {
-    departments {
-      id
-      name
-      positions {
-        id
-        title
-      }
-    }
-  }
-`;
-
-const ADD_DEPARTMENT = gql`
-  mutation($name: String!) {
-    insert_departments(objects: { name: $name }) {
-      returning {
-        id
-        name
-        positions {
-          id
-          title
-        }
-      }
-    }
-  }
-`;
-
-const ADD_POSITION = gql`
-  mutation($dept: Int!, $title: String!) {
-    insert_positions(objects: { department: $dept, title: $title }) {
-      returning {
-        id
-        department
-        title
-      }
-    }
-  }
-`;
-
-export default function Admin() {
+export default function Admin({ history }) {
   const [text, setText] = useState("");
   const [departmentID, setDepartmentID] = useState("");
   const [dialog, setDialog] = useState({ open: false, type: "" });
   const [notify, setNotify] = useState({ open: false, message: "" });
 
   return (
-    <>
-      <Header />
+    <Fragment>
+      <Header history={history} />
       <StyledPaper elevation={0}>
         <Fade in timeout={{ enter: 700, exit: 700 }}>
-          <Grid
-            container
-            spacing={8}
-            style={{ height: "90vh", overflowY: "scroll" }}
-          >
+          <ScrollContainer container spacing={8}>
             <Grid item xs={12}>
               <h1>
                 Departments
@@ -126,7 +85,7 @@ export default function Admin() {
                 ));
               }}
             </Query>
-          </Grid>
+          </ScrollContainer>
         </Fade>
         <Dialog open={dialog.open} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">
@@ -251,6 +210,6 @@ export default function Admin() {
         </Dialog>
         <Notify open={notify.open} message={notify.message} />
       </StyledPaper>
-    </>
+    </Fragment>
   );
 }

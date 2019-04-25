@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Paper from "@material-ui/core/Paper";
 import { Link } from "react-router-dom";
 import routes from "../../routes";
 import Hidden from "@material-ui/core/Hidden";
@@ -7,12 +6,12 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import { StyledHeader } from "../StyledComponents/StyledComponents";
+import { StyledHeader, MobileNav } from "../StyledComponents/StyledComponents";
 
-export default function Header({ history, setSearch, search, children }) {
+export default function Header({ history, children }) {
   const [open, setOpen] = useState(false);
-  const navigate = url => {
-    history.push(url);
+  const navigate = path => {
+    history.push(path);
     setOpen(false);
   };
 
@@ -21,7 +20,14 @@ export default function Header({ history, setSearch, search, children }) {
       <Hidden xsDown>
         <div>
           {routes.map((route, i) => (
-            <Link to={route.path} key={i} style={{ marginRight: "20px" }}>
+            <Link
+              to={route.path}
+              key={i}
+              style={{ marginRight: "20px" }}
+              className={
+                route.path === history.location.pathname ? "current" : ""
+              }
+            >
               {route.name}
             </Link>
           ))}
@@ -36,15 +42,19 @@ export default function Header({ history, setSearch, search, children }) {
           <MenuIcon />
         </IconButton>
         {open === true && (
-          <Paper style={{ position: "absolute", left: "27px", top: "52px" }}>
+          <MobileNav>
             <List>
               {routes.map((route, i) => (
-                <ListItem key={i} onClick={() => navigate(route.name)}>
+                <ListItem
+                  key={i}
+                  onClick={() => navigate(route.path)}
+                  className="pointer menu-item"
+                >
                   {route.name}
                 </ListItem>
               ))}
             </List>
-          </Paper>
+          </MobileNav>
         )}
       </Hidden>
       {children}

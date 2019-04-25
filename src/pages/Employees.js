@@ -1,15 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
-import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import Grid from "@material-ui/core/Grid";
 import Fade from "@material-ui/core/Fade";
 import { FiMail, FiPhone, FiPlusCircle, FiEdit } from "react-icons/fi";
 import Loader from "../components/Loader/Loader";
 import {
+  ScrollContainer,
   FaceCard,
   NameSection,
   StyledPaper,
-  Avatar
+  Avatar,
+  SearchBar
 } from "../components/StyledComponents/StyledComponents";
 import Header from "../components/Header/Header";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -24,7 +25,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import { GET_EMPLOYEES, ADD_EMPLOYEE, UPDATE_EMPLOYEE } from "../graphql";
 const InfoSection = ({ dept, position }) => (
   <div>
     <p>{dept}</p>
@@ -32,158 +33,7 @@ const InfoSection = ({ dept, position }) => (
   </div>
 );
 
-const GET_EMPLOYEES = gql`
-  query($limit: Int, $offset: Int, $search: String) {
-    employees(
-      where: { full_name: { _ilike: $search } }
-      limit: $limit
-      offset: $offset
-      order_by: { last_name: asc }
-    ) {
-      id
-      email
-      gender
-      first_name
-      last_name
-      full_name
-      phone
-      position
-      positionByPosition {
-        departmentByDepartment {
-          name
-        }
-        title
-      }
-      pic_large
-      pic_med
-      pic_thumb
-    }
-
-    positions {
-      id
-      title
-    }
-  }
-`;
-
-const ADD_EMPLOYEE = gql`
-  mutation addEmployee(
-    $email: String!
-    $first: String!
-    $last: String!
-    $full: String!
-    $gender: String!
-    $phone: String!
-    $large: String!
-    $med: String!
-    $thumb: String!
-    $position: Int!
-  ) {
-    insert_employees(
-      objects: {
-        email: $email
-        first_name: $first
-        full_name: $full
-        gender: $gender
-        last_name: $last
-        phone: $phone
-        pic_large: $large
-        pic_med: $med
-        pic_thumb: $thumb
-        position: $position
-      }
-    ) {
-      returning {
-        id
-        email
-        gender
-        first_name
-        last_name
-        full_name
-        phone
-        position
-        positionByPosition {
-          departmentByDepartment {
-            name
-          }
-          title
-        }
-        pic_large
-        pic_med
-        pic_thumb
-      }
-    }
-  }
-`;
-
-const UPDATE_EMPLOYEE = gql`
-  mutation updateEmployee(
-    $id: Int!
-    $email: String!
-    $first: String!
-    $last: String!
-    $full: String!
-    $gender: String!
-    $phone: String!
-    $large: String!
-    $med: String!
-    $thumb: String!
-    $position: Int!
-  ) {
-    insert_employees(
-      objects: {
-        id: $id
-        email: $email
-        first_name: $first
-        full_name: $full
-        gender: $gender
-        last_name: $last
-        phone: $phone
-        pic_large: $large
-        pic_med: $med
-        pic_thumb: $thumb
-        position: $position
-      }
-      on_conflict: {
-        constraint: employees_pkey
-        update_columns: [
-          email
-          first_name
-          full_name
-          gender
-          phone
-          last_name
-          pic_large
-          pic_med
-          pic_thumb
-          position
-        ]
-      }
-    ) {
-      returning {
-        id
-        email
-        gender
-        first_name
-        last_name
-        full_name
-        phone
-        position
-        positionByPosition {
-          departmentByDepartment {
-            name
-          }
-          title
-        }
-        pic_large
-        pic_med
-        pic_thumb
-      }
-    }
-  }
-`;
-
-export default function Employees({ client }) {
+export default function Employees({ client, history }) {
   const [employeeList, setEmployeeList] = useState([]);
   const [positions, setPositions] = useState([]);
   const [selected, setSelected] = useState("");
@@ -259,8 +109,8 @@ export default function Employees({ client }) {
 
   return (
     <Fragment>
-      <Header>
-        <form onSubmit={handleSearch} className="search-bar">
+      <Header history={history}>
+        <SearchBar onSubmit={handleSearch}>
           <Tooltip title="Add Employee" placement="left-start">
             <IconButton
               aria-label="Add Employee"
@@ -286,7 +136,7 @@ export default function Employees({ client }) {
                 </InputAdornment>
               ) : (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon className="under-menu" />
                 </InputAdornment>
               )
             }}
@@ -296,15 +146,10 @@ export default function Employees({ client }) {
           <Button type="submit" disabled={!search.length}>
             Search
           </Button>
-        </form>
+        </SearchBar>
       </Header>
       <StyledPaper elevation={0}>
-        <Grid
-          container
-          spacing={24}
-          style={{ height: "80vh", overflowY: "scroll" }}
-          onScroll={handleScroll}
-        >
+        <ScrollContainer container spacing={24} onScroll={handleScroll}>
           {employeeList.length === 0 ? (
             <Fade in timeout={{ enter: 100, exit: 700 }}>
               <h1>No results</h1>
@@ -359,7 +204,7 @@ export default function Employees({ client }) {
             ))
           )}
           {bottomLoader && <Loader amount={5} bottom />}
-        </Grid>
+        </ScrollContainer>
         <Dialog
           open={dialog}
           // onClose={this.handleClose}

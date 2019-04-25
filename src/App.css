@@ -38,17 +38,26 @@ h4 {
 .pointer:hover {
   cursor: pointer;
 }
-.search-bar {
-  display: flex;
-  align-items: center;
-  margin-right: 100px;
+.menu-item:hover {
+  background: rgb(244, 251, 193);
+  background: linear-gradient(
+    90deg,
+    rgba(244, 251, 193, 1) 0%,
+    rgba(177, 221, 189, 1) 100%
+  );
 }
-
 .updated {
   animation-duration: 3s;
   animation-name: flash;
 }
-
+.under-menu {
+  z-index: 1;
+}
+.current,
+.current:active,
+.current:visited {
+  text-decoration: underline wavy #7dafb8;
+}
 @keyframes flash {
   from {
     background: #ffa600;

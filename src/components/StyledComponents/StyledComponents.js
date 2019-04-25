@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 
 export const FaceCard = styled.div`
   text-align: center;
@@ -29,9 +30,8 @@ export const StyledHeader = styled.header`
   background: rgb(251, 254, 207);
   background: transparent;
   width: 100%;
-  margin: 0;
   height: 50px;
-  padding: 13px;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,8 +44,8 @@ export const Nav = styled.nav`
 export const StyledPaper = styled(Paper)`
   && {
     background: transparent;
-    margin: 0 2rem 2rem 4rem;
-    padding: 1rem 3rem 3rem 3rem;
+    margin: 0 2rem;
+    /* padding: 1rem 3rem 3rem 3rem; */
     height: ${props => (props.height ? props.height : "auto")};
   }
 `;
@@ -54,4 +54,22 @@ export const Avatar = styled.img`
   border-radius: 50%;
   width: 128px;
   height: 128px;
+`;
+
+export const SearchBar = styled.form`
+  display: flex;
+  align-items: center;
+  margin-right: 4rem;
+`;
+
+export const ScrollContainer = styled(Grid)`
+  height: 90vh;
+  overflow-y: scroll;
+`;
+
+export const MobileNav = styled(Paper)`
+  position: absolute;
+  left: 27px;
+  top: 52px;
+  z-index: 10;
 `;
