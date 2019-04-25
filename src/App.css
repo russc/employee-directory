@@ -1,0 +1,62 @@
+html {
+  background-image: url("./trianglify2.png");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+body {
+  font-family: "Josefin Sans", sans-serif;
+  margin: 0;
+}
+.slick-prev:before {
+  color: #ffb258;
+}
+.slick-next:before {
+  color: #cbbbd1;
+}
+a,
+a:active,
+a:visited {
+  color: #333;
+  text-decoration: none;
+}
+a:hover {
+  color: #b4767f;
+}
+.add-position:hover {
+  color: cornflowerblue;
+  cursor: pointer;
+}
+h4 {
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+.text-center {
+  text-align: center;
+}
+.pointer:hover {
+  cursor: pointer;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-right: 100px;
+}
+
+.updated {
+  animation-duration: 3s;
+  animation-name: flash;
+}
+
+@keyframes flash {
+  from {
+    background: #ffa600;
+    opacity: 0;
+  }
+
+  to {
+    background: none;
+    opacity: 1;
+  }
+}
