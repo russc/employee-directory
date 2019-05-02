@@ -2,12 +2,14 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://russc.github.io/employee-directory/",
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
     "apollo-link-http": "^1.5.14",
+    "gh-pages": "^2.0.1",
     "graphql": "^14.2.1",
     "graphql-tag": "^2.10.1",
     "history": "4.7.2",
@@ -27,7 +29,9 @@
     "build": "react-app-rewired build",
     "start": "react-app-rewired start",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
