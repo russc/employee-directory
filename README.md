@@ -17,7 +17,7 @@
 
 ## Live Demo
 
-[Here is a demo hosted on now.](https://build-nnatifdndr.now.sh/)
+[Here is a demo.](http://russc.github.io/employee-directory)
 
 ## Steps for setting it up locally
 
