@@ -3,12 +3,12 @@ import Employees from "./pages/Employees";
 
 const routes = [
   {
-    path: "/admin",
+    path: "/employee-directory/admin",
     name: "Admin",
     component: Admin
   },
   {
-    path: "/",
+    path: "/employee-directory",
     name: "Employees",
     component: Employees
   }
